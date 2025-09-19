@@ -1,0 +1,1 @@
+export const mockFinances = { todaySales: 23.50, currentCash: 500.00, lowStockCount: 2 };
