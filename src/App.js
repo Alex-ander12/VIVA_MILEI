@@ -17,22 +17,19 @@ import './styles.css';
 const App = () => {
   const [user, setUser] = useState(getCurrentUser());
 
-  // Escuchar cambios en localStorage para actualizar el estado del usuario
   useEffect(() => {
     const handleStorageChange = () => {
       setUser(getCurrentUser());
     };
 
-    // Escuchar cambios en localStorage (funciona para la misma pestaña)
     window.addEventListener('storage', handleStorageChange);
-    
-    // También verificar al cargar la página
+
     const interval = setInterval(() => {
       const currentUser = getCurrentUser();
       if (currentUser !== user) {
         setUser(currentUser);
       }
-    }, 100); // Verificar cada 100ms para detectar cambios rápidos
+    }, 100);
 
     return () => {
       window.removeEventListener('storage', handleStorageChange);
@@ -40,7 +37,6 @@ const App = () => {
     };
   }, [user]);
 
-  // Actualizar user cuando cambie localStorage
   useEffect(() => {
     const currentUser = getCurrentUser();
     if (currentUser !== user) {
@@ -52,10 +48,12 @@ const App = () => {
     <Router>
       <div className="flex">
         {user && <Sidebar />}
-        <div className={user ? 'flex-1 ml-0 md:ml-64' : 'w-full'}>
+        {/* En desktop Sidebar ocupa 64px (ml-64), en móvil Sidebar oculto (ml-0) */}
+        <div className={user ? 'flex-1 ml-0 lg:ml-64' : 'w-full'}>
           {user && <Navbar />}
           <Routes>
             <Route path="/login" element={!user ? <Login /> : <Navigate to="/dashboard" />} />
+            
             <Route
               path="/dashboard"
               element={
@@ -66,6 +64,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/ventas"
               element={
@@ -76,6 +75,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/inventario"
               element={
@@ -86,6 +86,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/caja"
               element={
@@ -96,6 +97,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/proveedores"
               element={
@@ -106,6 +108,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
             <Route
               path="/reportes"
               element={
@@ -116,6 +119,7 @@ const App = () => {
                 </ProtectedRoute>
               }
             />
+
             <Route path="*" element={<Navigate to={user ? "/dashboard" : "/login"} />} />
           </Routes>
         </div>
